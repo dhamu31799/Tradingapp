@@ -66,7 +66,8 @@ const Navigation = () => {
       {/* Nav Header including Logo & nav toggle icons  */}
       <NavHeader>
         <Link href={{pathname:'/'}}>
-          <Logo />
+          {/* <Logo /> */}
+          App Name
         </Link>
         {isBreakpointReached && <i className='ri-close-line text-xl' onClick={() => toggleVerticalNav(false)} />}
       </NavHeader>

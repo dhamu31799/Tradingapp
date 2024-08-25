@@ -96,11 +96,11 @@ const VerticalMenu = ({ scrollMenu }) => {
             Logistics
           </MenuItem> */}
         </SubMenu>
-        <MenuItem href='/newRegistration'>New Registration</MenuItem>
-          <MenuItem href='/CustomerLevel'>Customer Level</MenuItem>
-          <MenuItem href='/Coindetails'>Coins Detail</MenuItem>
-          <MenuItem href='/WithdrawStatus'>Withdraw Status</MenuItem>
-          <MenuItem href='/GradeAchievers'>Grade Achievers</MenuItem>
+        <MenuItem href='/UnderMaintenance'>New Registration</MenuItem>
+          <MenuItem href='/UnderMaintenance'>Customer Level</MenuItem>
+          <MenuItem href='/UnderMaintenance'>Coins Detail</MenuItem>
+          <MenuItem href='/UnderMaintenance'>Withdraw Status</MenuItem>
+          <MenuItem href='/UnderMaintenance'>Grade Achievers</MenuItem>
           <MenuItem href='/'>Logout</MenuItem>
 {/* 
         <SubMenu

@@ -5,6 +5,7 @@ module.exports = {
     "prettier"
   ],
   "rules": {
+    "newline-before-return": "off",
     "jsx-a11y/alt-text": "off",
     "react/display-name": "off",
     "react/no-children-prop": "off",
@@ -68,7 +69,7 @@ module.exports = {
         "next": "*"
       }
     ],
-    "newline-before-return": "error",
+  
     "import/newline-after-import": [
       "error",
       {

@@ -24,11 +24,11 @@ const FooterContent = () => {
         <span>{`© ${new Date().getFullYear()}, Made with `}</span>
         <span>{`❤️`}</span>
         <span>{` by `}</span>
-        <Link href={{pathname:'https://themeselection.com'}}  className='text-primary'>
-          ThemeSelection
-        </Link>
+        <span className='text-primary'>
+          Clever Programming
+        </span>
       </p>
-      {!isBreakpointReached && (
+      {/* {!isBreakpointReached && (
         <div className='flex items-center gap-4'>
           <Link href={{pathname:'https://themeselection.com/license'}}  className='text-primary'>
             License
@@ -46,7 +46,7 @@ const FooterContent = () => {
             Support
           </Link>
         </div>
-      )}
+      )} */}
     </div>
   )
 }

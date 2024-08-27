@@ -21,54 +21,7 @@ module.exports = {
         "allowArrayStart": true
       }
     ],
-    "padding-line-between-statements": [
-      "error",
-      {
-        "blankLine": "any",
-        "prev": "export",
-        "next": "export"
-      },
-      {
-        "blankLine": "always",
-        "prev": [
-          "const",
-          "let",
-          "var"
-        ],
-        "next": "*"
-      },
-      {
-        "blankLine": "any",
-        "prev": [
-          "const",
-          "let",
-          "var"
-        ],
-        "next": [
-          "const",
-          "let",
-          "var"
-        ]
-      },
-      {
-        "blankLine": "always",
-        "prev": "*",
-        "next": [
-          "function",
-          "multiline-const",
-          "multiline-block-like"
-        ]
-      },
-      {
-        "blankLine": "always",
-        "prev": [
-          "function",
-          "multiline-const",
-          "multiline-block-like"
-        ],
-        "next": "*"
-      }
-    ],
+    "padding-line-between-statements": "off",
   
     "import/newline-after-import": [
       "error",
@@ -76,51 +29,7 @@ module.exports = {
         "count": 1
       }
     ],
-    "import/order": [
-      "error",
-      {
-        "groups": [
-          "builtin",
-          "external",
-          [
-            "internal",
-            "parent",
-            "sibling",
-            "index"
-          ],
-          [
-            "object",
-            "unknown"
-          ]
-        ],
-        "pathGroups": [
-          {
-            "pattern": "react",
-            "group": "external",
-            "position": "before"
-          },
-          {
-            "pattern": "next/**",
-            "group": "external",
-            "position": "before"
-          },
-          {
-            "pattern": "~/**",
-            "group": "external",
-            "position": "before"
-          },
-          {
-            "pattern": "@/**",
-            "group": "internal"
-          }
-        ],
-        "pathGroupsExcludedImportTypes": [
-          "react",
-          "type"
-        ],
-        "newlines-between": "always-and-inside-groups"
-      }
-    ]
+   
   },
   "settings": {
     "react": {

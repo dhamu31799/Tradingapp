@@ -96,7 +96,7 @@ const VerticalMenu = ({ scrollMenu }) => {
             Logistics
           </MenuItem> */}
         </SubMenu>
-        <MenuItem href='/UnderMaintenance'>New Registration</MenuItem>
+        <MenuItem href='/newRegistration'>New Registration</MenuItem>
           <MenuItem href='/UnderMaintenance'>Customer Level</MenuItem>
           <MenuItem href='/UnderMaintenance'>Coins Detail</MenuItem>
           <MenuItem href='/UnderMaintenance'>Withdraw Status</MenuItem>

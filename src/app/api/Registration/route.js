@@ -2,10 +2,10 @@ import mysql from 'mysql2/promise';
 
 // Database connection configuration
 const dbConfig = {
-    host: 'bspss27gjtqrv9gkbhix-mysql.services.clever-cloud.com',
-    user: 'uazjoikjqtmri9ys',
-    password: 'sGfCzi0MDU4aGM2C2xqK', // Leave empty if no password is set
-    database: 'bspss27gjtqrv9gkbhix',
+    host: 'p3plzcpnl504899.prod.phx3.secureserver.net',
+    user: 'hariharan',
+    password: 'myself@12345', // Leave empty if no password is set
+    database: 'vpower',
     port: 3306, // Default MySQL port
 };
 

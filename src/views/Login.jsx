@@ -76,7 +76,7 @@ const Login = ({ mode }) => {
     if (response.ok) {
       const data = await response.json()
       localStorage.setItem('Userinfo', JSON.stringify(data.user))
-      // Redirect to the dashboard or another page
+
       router.push('/dashboard')
     } else {
       alert("Invalid Register No or Password. Please try again.")

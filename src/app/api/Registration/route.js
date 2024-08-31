@@ -7,17 +7,13 @@ import { dbConfig } from '../Constant';
 export async function GET(req,res) {
     try {
      
-        // Validate the incoming data
-       
-
-        // Create a connection to the database
+     
         const connection = await mysql.createConnection(dbConfig);
 
-        // Insert data into the database
         const [result] = await connection.execute(
             `SELECT * FROM TblRegistration` );
 
-        // Close the connection
+       
         await connection.end();
 
         return new Response(
@@ -39,7 +35,7 @@ export async function POST(request) {
     try {
         const data = await request.json();
      
-        // Validate the incoming data
+
         const {
             registrationNumber,
             firstName,
@@ -64,10 +60,9 @@ export async function POST(request) {
             );
         }
 
-        // Create a connection to the database
         const connection = await mysql.createConnection(dbConfig);
 
-        // Insert data into the database
+
         const [result] = await connection.execute(
             `INSERT INTO TblRegistration  (
                UserType, registrationNumber, FirstName, MiddleName, LastName, EmailId,
@@ -84,12 +79,12 @@ export async function POST(request) {
         const registrationId = result.insertId;
         const registrationNumbers = `VPIN${registrationId}`;
 
-        // Update the record with the generated registrationNumber
+
         await connection.execute(
             `UPDATE TblRegistration SET RegistrationNumber = ? WHERE RegistrationId = ?`,
             [registrationNumbers, registrationId]
         );
-        // Close the connection
+
         await connection.end();
 
         return new Response(
@@ -111,7 +106,7 @@ export async function PUT(request) {
     try {
         const data = await request.json();
      
-        // Validate the incoming data
+
         const {
             RegistrationId,
             registrationNumber,
@@ -137,10 +132,9 @@ export async function PUT(request) {
             );
         }
 
-        // Create a connection to the database
         const connection = await mysql.createConnection(dbConfig);
 
-        // Update data in the database
+      
         const [result] = await connection.execute(
             `UPDATE TblRegistration SET 
                 FirstName = ?, MiddleName = ?, LastName = ?, EmailId = ?,
@@ -155,7 +149,7 @@ export async function PUT(request) {
             ]
         );
 
-        // Close the connection
+     
         await connection.end();
 
         return new Response(
@@ -184,16 +178,16 @@ export async function DELETE(request) {
             );
         }
 
-        // Create a connection to the database
+      
         const connection = await mysql.createConnection(dbConfig);
 
-        // Delete data from the database
+      
         const [result] = await connection.execute(
             `DELETE FROM TblRegistration WHERE RegistrationId = ?`,
             [RegistrationId]
         );
 
-        // Close the connection
+     
         await connection.end();
 
         return new Response(

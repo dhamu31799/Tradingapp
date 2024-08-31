@@ -144,7 +144,7 @@ export default function RegistrationModal() {
             });
 
             if (response.ok) {
-                // setRegistrations([...registrations, formData]);
+               
                 GetUserRegister()
                 handleClose();
             } else {

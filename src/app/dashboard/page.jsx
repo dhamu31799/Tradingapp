@@ -20,10 +20,10 @@ const DashboardAnalytics = () => {
       <Grid item xs={12} md={4}>
         <Award />
       </Grid>
-      <Grid item xs={12} md={8} lg={8}>
+     <Grid item xs={12} md={8} lg={8}>
         <Transactions />
-      </Grid>
-      <Grid item xs={12} md={6} lg={4}>
+       </Grid>
+       {/*<Grid item xs={12} md={6} lg={4}>
         <WeeklyOverview />
       </Grid>
       <Grid item xs={12} md={6} lg={4}>
@@ -69,7 +69,7 @@ const DashboardAnalytics = () => {
       </Grid>
       <Grid item xs={12}>
         <Table />
-      </Grid>
+      </Grid> */}
     </Grid>
   
     </>

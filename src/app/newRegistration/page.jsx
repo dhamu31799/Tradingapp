@@ -1,5 +1,5 @@
 "use client";
-import React, { useState , useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
@@ -15,13 +15,20 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import IconButton from "@mui/material/IconButton";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 
 export default function RegistrationModal() {
     const [open, setOpen] = useState(false);
-    const [registrations, setRegistrations] = useState([
-       
-      ]
-    );
+    const [editMode, setEditMode] = useState(false);
+    const [editIndex, setEditIndex] = useState(null);
+    const [Usertype, setUsertype] = useState([
+        {lable:"Admin", value:"Admin"},
+        {lable:"User", value:"User"}
+    ])
+    const [registrations, setRegistrations] = useState([]);
     const [formData, setFormData] = useState({
         registrationNumber: "1000",
         firstName: "",
@@ -36,6 +43,7 @@ export default function RegistrationModal() {
         state: "",
         country: "",
         pinCode: "",
+        usertype:""
     });
 
     const [errors, setErrors] = useState({});
@@ -46,6 +54,24 @@ export default function RegistrationModal() {
 
     const handleClose = () => {
         setOpen(false);
+        setEditMode(false);
+        setEditIndex(null);
+        setFormData({
+            registrationNumber: "1000",
+            firstName: "",
+            middleName: "",
+            lastName: "",
+            emailId: "",
+            phoneNumber: "",
+            aadharNumber: "",
+            panNumber: "",
+            address1: "",
+            address2: "",
+            state: "",
+            country: "",
+            pinCode: "", 
+            usertype: ""
+        });
         setErrors({});
     };
 
@@ -62,8 +88,7 @@ export default function RegistrationModal() {
 
         if (!formData.firstName) tempErrors.firstName = "First Name is required";
         if (!formData.lastName) tempErrors.lastName = "Last Name is required";
-        if (!formData.emailId)
-            tempErrors.emailId = "Email is required";
+        if (!formData.emailId) tempErrors.emailId = "Email is required";
         else if (!/\S+@\S+\.\S+/.test(formData.emailId))
             tempErrors.emailId = "Email is not valid";
 
@@ -90,6 +115,26 @@ export default function RegistrationModal() {
             return;
         }
 
+        if (editMode) {
+            const updatedRegistrations = [...registrations];
+            updatedRegistrations[editIndex] = formData;
+
+            const response = await fetch("/api/Registration", {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(updatedRegistrations[editIndex]),
+            });
+
+            if (response.ok) {
+               // setRegistrations(updatedRegistrations);
+                GetUserRegister()
+                handleClose();
+            } else {
+                alert("Update failed. Please try again.");
+            }
+        } else {
             const response = await fetch("/api/Registration", {
                 method: "POST",
                 headers: {
@@ -98,61 +143,80 @@ export default function RegistrationModal() {
                 body: JSON.stringify(formData),
             });
 
-        if (response.ok) {
-            // alert("Registration successful!");
-            setRegistrations([...registrations, formData]);  // Add new registration to the list
-            setFormData({
-                registrationNumber: "",
-                firstName: "",
-                middleName: "",
-                lastName: "",
-                emailId: "",
-                phoneNumber: "",
-                aadharNumber: "",
-                panNumber: "",
-                address1: "",
-                address2: "",
-                state: "",
-                country: "",
-                pinCode: "",
-            });
-            handleClose();
-            GetUserRegister()
-        } else {
-            alert("Registration failed. Please try again.");
+            if (response.ok) {
+                // setRegistrations([...registrations, formData]);
+                GetUserRegister()
+                handleClose();
+            } else {
+                alert("Registration failed. Please try again.");
+            }
         }
     };
 
+    const handleEdit = (index) => {
+        setFormData({
+            RegistrationId: registrations[index].RegistrationId,
+            registrationNumber: registrations[index].RegistrationNumber,
+            firstName: registrations[index].FirstName,
+            middleName: registrations[index].MiddleName,
+            lastName: registrations[index].LastName,
+            emailId: registrations[index].EmailId,
+            phoneNumber: registrations[index].PhoneNumber,
+            aadharNumber: registrations[index].AadharNumber,
+            panNumber: registrations[index].PanNumber,
+            address1: registrations[index].Address1,
+            address2: registrations[index].Address2,
+            state: registrations[index].State,
+            country: registrations[index].Country,
+            pinCode: registrations[index].PinCode,
+            usertype:registrations[index].UserType
+        });
+        // setFormData(registrations[index]);
+        setEditMode(true);
+        setEditIndex(index);
+        setOpen(true);
+    };
 
-    const GetUserRegister = async() => {
+    const handleDelete = async (index) => {
+        const updatedRegistrations = registrations.filter((_, i) => i !== index);
 
+        const response = await fetch(`/api/Registration/${registrations[index].RegistrationId}`, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+
+        if (response.ok) {
+            // setRegistrations(updatedRegistrations);
+            GetUserRegister()
+        } else {
+            alert("Delete failed. Please try again.");
+        }
+    };
+
+    const GetUserRegister = async () => {
         const response = await fetch("/api/Registration", {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
             },
-           
         }).then((res) => res.json()).then((data) => {
-            console.log(data.result)
-           setRegistrations(data.result)
-        })
-
-    
-    }
-
+            console.log(data.result);
+            setRegistrations(data.result);
+        });
+    };
 
     useEffect(() => {
-        GetUserRegister()
-    }, [])
-    
+        GetUserRegister();
+    }, []);
+
     return (
         <div>
-           
-            <Box sx={{ width: "200px" , alignContent:"flex-end"}}>
+            <Box sx={{ width: "200px", alignContent: "flex-end" }}>
                 <Button variant="contained" onClick={handleClickOpen} fullWidth>
-                    New Registration 
+                    New Registration
                 </Button>
-           
             </Box>
             <TableContainer component={Paper} sx={{ mt: 4 }}>
                 <Table>
@@ -166,6 +230,7 @@ export default function RegistrationModal() {
                             <TableCell>State</TableCell>
                             <TableCell>Country</TableCell>
                             <TableCell>Pin Code</TableCell>
+                            <TableCell>Actions</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -179,6 +244,14 @@ export default function RegistrationModal() {
                                 <TableCell>{registration.State}</TableCell>
                                 <TableCell>{registration.Country}</TableCell>
                                 <TableCell>{registration.PinCode}</TableCell>
+                                <TableCell>
+                                    <IconButton onClick={() => handleEdit(index)} color="primary">
+                                        <EditIcon />
+                                    </IconButton>
+                                    <IconButton onClick={() => handleDelete(index)} color="secondary">
+                                        <DeleteIcon />
+                                    </IconButton>
+                                </TableCell>
                             </TableRow>
                         ))}
                     </TableBody>
@@ -186,7 +259,7 @@ export default function RegistrationModal() {
             </TableContainer>
 
             <Dialog open={open} onClose={handleClose} maxWidth="xs" fullWidth>
-                <DialogTitle>Registration Form</DialogTitle>
+                <DialogTitle>{editMode ? "Edit Registration" : "Registration Form"}</DialogTitle>
                 <DialogContent>
                     <Box component="form" onSubmit={handleSubmit}>
                         <Grid container spacing={2}>
@@ -334,7 +407,7 @@ export default function RegistrationModal() {
                                     size="small"
                                 />
                             </Grid>
-                            <Grid item xs={12}>
+                            <Grid item xs={12} sm={6}>
                                 <TextField
                                     name="pinCode"
                                     required
@@ -347,6 +420,25 @@ export default function RegistrationModal() {
                                     sx={{ mb: 2 }}
                                     size="small"
                                 />
+                                
+                            </Grid>
+                            <Grid item xs={12} sm={6}>
+                            <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+      <InputLabel id="demo-select-small-label">Type</InputLabel>
+      <Select
+        labelId="demo-select-small-label"
+        id="demo-select-small"
+        value={formData.usertype}
+        label="usertype"
+        onChange={handleChange}
+        name="usertype"
+      >
+       
+        <MenuItem value={"Admin"}>Admin</MenuItem>
+        <MenuItem value={"User"}>User</MenuItem>
+      
+      </Select>
+    </FormControl>
                             </Grid>
                         </Grid>
                     </Box>
@@ -356,7 +448,7 @@ export default function RegistrationModal() {
                         Cancel
                     </Button>
                     <Button onClick={handleSubmit} color="primary" variant="contained">
-                        Register
+                        {editMode ? "Update" : "Register"}
                     </Button>
                 </DialogActions>
             </Dialog>

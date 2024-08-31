@@ -1,13 +1,7 @@
 import mysql from 'mysql2/promise';
+import { dbConfig } from '../Constant';
 
-// Database connection configuration
-const dbConfig = {
-    host: 'p3plzcpnl504899.prod.phx3.secureserver.net',
-    user: 'hariharan',
-    password: 'myself@12345', // Leave empty if no password is set
-    database: 'vpower',
-    port: 3306, // Default MySQL port
-};
+
 
 
 export async function GET(req,res) {
@@ -60,6 +54,7 @@ export async function POST(request) {
             state,
             country,
             pinCode,
+            usertype,
         } = data;
 
         if (!registrationNumber || !firstName || !lastName || !emailId || !phoneNumber) {
@@ -75,14 +70,88 @@ export async function POST(request) {
         // Insert data into the database
         const [result] = await connection.execute(
             `INSERT INTO TblRegistration  (
-                registrationNumber, FirstName, MiddleName, LastName, EmailId,
+               UserType, registrationNumber, FirstName, MiddleName, LastName, EmailId,
                 PhoneNumber, AadharNumber, PanNumber, Address1, Address2, State,
-                Country, PinCode, CreatedDate
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())`,
+                Country, PinCode, Password, CreatedDate
+            ) VALUES (?, ? , ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 123456, NOW())`,
             [
-                12, firstName, middleName, lastName, emailId,
+                usertype, 12, firstName, middleName, lastName, emailId,
                 phoneNumber, aadharNumber, panNumber, address1, address2, state,
                 country, pinCode
+            ]
+        );
+        console.log(result,"result")
+        const registrationId = result.insertId;
+        const registrationNumbers = `VPIN${registrationId}`;
+
+        // Update the record with the generated registrationNumber
+        await connection.execute(
+            `UPDATE TblRegistration SET RegistrationNumber = ? WHERE RegistrationId = ?`,
+            [registrationNumbers, registrationId]
+        );
+        // Close the connection
+        await connection.end();
+
+        return new Response(
+            JSON.stringify({ message: 'Registration successful', result }),
+            { status: 200 }
+        );
+    } catch (error) {
+        console.error('Error:', error);
+        return new Response(
+            JSON.stringify({ error: 'An error occurred' }),
+            { status: 500 }
+        );
+    }
+}
+
+
+
+export async function PUT(request) {
+    try {
+        const data = await request.json();
+     
+        // Validate the incoming data
+        const {
+            RegistrationId,
+            registrationNumber,
+            firstName,
+            middleName,
+            lastName,
+            emailId,
+            phoneNumber,
+            aadharNumber,
+            panNumber,
+            address1,
+            address2,
+            state,
+            country,
+            pinCode,
+            usertype
+        } = data;
+
+        if (!registrationNumber || !firstName || !lastName || !emailId || !phoneNumber) {
+            return new Response(
+                JSON.stringify({ error: 'Missing required fields' }),
+                { status: 400 }
+            );
+        }
+
+        // Create a connection to the database
+        const connection = await mysql.createConnection(dbConfig);
+
+        // Update data in the database
+        const [result] = await connection.execute(
+            `UPDATE TblRegistration SET 
+                FirstName = ?, MiddleName = ?, LastName = ?, EmailId = ?,
+                PhoneNumber = ?, AadharNumber = ?, PanNumber = ?, Address1 = ?, 
+                Address2 = ?, State = ?, Country = ?, PinCode = ?,
+                UserType = ?
+            WHERE RegistrationId = ?`,
+            [
+                firstName, middleName, lastName, emailId,
+                phoneNumber, aadharNumber, panNumber, address1, address2, state,
+                country, pinCode,usertype, RegistrationId, 
             ]
         );
 
@@ -90,7 +159,45 @@ export async function POST(request) {
         await connection.end();
 
         return new Response(
-            JSON.stringify({ message: 'Registration successful', result }),
+            JSON.stringify({ message: 'Registration updated successfully', result }),
+            { status: 200 }
+        );
+    } catch (error) {
+        console.error('Error:', error);
+        return new Response(
+            JSON.stringify({ error: 'An error occurred' }),
+            { status: 500 }
+        );
+    }
+}
+
+
+export async function DELETE(request) {
+    try {
+        const url = new URL(request.url);
+        const registrationNumber = url.searchParams.get('RegistrationId');
+
+        if (!registrationNumber) {
+            return new Response(
+                JSON.stringify({ error: 'Missing registration number' }),
+                { status: 400 }
+            );
+        }
+
+        // Create a connection to the database
+        const connection = await mysql.createConnection(dbConfig);
+
+        // Delete data from the database
+        const [result] = await connection.execute(
+            `DELETE FROM TblRegistration WHERE RegistrationId = ?`,
+            [RegistrationId]
+        );
+
+        // Close the connection
+        await connection.end();
+
+        return new Response(
+            JSON.stringify({ message: 'Registration deleted successfully', result }),
             { status: 200 }
         );
     } catch (error) {

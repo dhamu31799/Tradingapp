@@ -17,6 +17,7 @@ import StyledVerticalNavExpandIcon from '@menu/styles/vertical/StyledVerticalNav
 // Style Imports
 import menuItemStyles from '@core/styles/vertical/menuItemStyles'
 import menuSectionStyles from '@core/styles/vertical/menuSectionStyles'
+import { useEffect, useState } from 'react'
 
 const RenderExpandIcon = ({ open, transitionDuration }) => (
   <StyledVerticalNavExpandIcon open={open} transitionDuration={transitionDuration}>
@@ -29,6 +30,13 @@ const VerticalMenu = ({ scrollMenu }) => {
   const theme = useTheme()
   const { isBreakpointReached, transitionDuration } = useVerticalNav()
   const ScrollWrapper = isBreakpointReached ? 'div' : PerfectScrollbar
+const [Userinfo, setUserinfo] = useState({})
+useEffect(() => {
+  
+const userinfos = JSON.parse(localStorage.getItem("Userinfo"))
+ console.log(userinfos)
+ setUserinfo(userinfos)
+}, [])
 
   return (
     // eslint-disable-next-line lines-around-comment
@@ -96,12 +104,26 @@ const VerticalMenu = ({ scrollMenu }) => {
             Logistics
           </MenuItem> */}
         </SubMenu>
+        {Userinfo.UserType === 'User'  ?  (
+          <>
+     
+        <MenuItem href='/UnderMaintenance'>Customer Level</MenuItem>
+        <MenuItem href='/UnderMaintenance'>Coins Detail</MenuItem>
+        <MenuItem href='/UnderMaintenance'>Tree Structure</MenuItem>
+  
+        <MenuItem href='/'>Logout</MenuItem>
+        </> 
+        ):
+        <> 
         <MenuItem href='/newRegistration'>New Registration</MenuItem>
-          <MenuItem href='/UnderMaintenance'>Customer Level</MenuItem>
-          <MenuItem href='/UnderMaintenance'>Coins Detail</MenuItem>
-          <MenuItem href='/UnderMaintenance'>Withdraw Status</MenuItem>
-          <MenuItem href='/UnderMaintenance'>Grade Achievers</MenuItem>
-          <MenuItem href='/'>Logout</MenuItem>
+        <MenuItem href='/UnderMaintenance'>Customer Level</MenuItem>
+        <MenuItem href='/UnderMaintenance'>Coins Detail</MenuItem>
+        <MenuItem href='/UnderMaintenance'>Withdraw Status</MenuItem>
+        <MenuItem href='/UnderMaintenance'>Grade Achievers</MenuItem>
+        <MenuItem href='/'>Logout</MenuItem>
+        </>
+        }
+
 {/* 
         <SubMenu
           label='Front Pages'

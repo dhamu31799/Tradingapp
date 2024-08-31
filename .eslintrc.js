@@ -5,6 +5,7 @@ module.exports = {
     "prettier"
   ],
   "rules": {
+     "lines-around-comment": 'off',
     "newline-before-return": "off",
     "jsx-a11y/alt-text": "off",
     "react/display-name": "off",

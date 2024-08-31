@@ -171,7 +171,7 @@ export default function RegistrationModal() {
             pinCode: registrations[index].PinCode,
             usertype:registrations[index].UserType
         });
-        // setFormData(registrations[index]);
+        
         setEditMode(true);
         setEditIndex(index);
         setOpen(true);
@@ -188,7 +188,7 @@ export default function RegistrationModal() {
         });
 
         if (response.ok) {
-            // setRegistrations(updatedRegistrations);
+           
             GetUserRegister()
         } else {
             alert("Delete failed. Please try again.");
